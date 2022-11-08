@@ -35,16 +35,16 @@ public class Asiakkaat extends HttpServlet {
 		String strJSON = "";
 		if (hakusana != null) {// Jos kutsun mukana tuli hakusana
 			if (!hakusana.equals("")) {// Jos hakusana ei ole tyhjä
-				asiakkaat = dao.listaa(hakusana); // Haetaan hakusanan mukaan
+				asiakkaat = dao.getAllItems(hakusana); // Haetaan hakusanan mukaan
 			} else {
-				asiakkaat = dao.listaa(); // Listaus kaikille asiakkaille
+				asiakkaat = dao.getAllItems(); // Listaus kaikille asiakkaille
 			}
 			strJSON = new Gson().toJson(asiakkaat);
 		} else if (asiakas_id != null) {
 			Asiakas asiakas = dao.getItem(Integer.parseInt(asiakas_id));
 			strJSON = new Gson().toJson(asiakas);
 		} else {
-			asiakkaat = dao.listaa(); // Listaus kaikille asiakkaille
+			asiakkaat = dao.getAllItems(); // Listaus kaikille asiakkaille
 			strJSON = new Gson().toJson(asiakkaat);
 		}
 		response.setContentType("application/json; charset=UTF-8");
