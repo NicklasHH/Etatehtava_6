@@ -45,7 +45,6 @@ public class Asiakkaat extends HttpServlet {
 			strJSON = new Gson().toJson(asiakas);
 		} else {
 			asiakkaat = dao.listaa(); // Listaus kaikille asiakkaille
-			strJSON = new Gson().toJson(asiakkaat);
 		}
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
