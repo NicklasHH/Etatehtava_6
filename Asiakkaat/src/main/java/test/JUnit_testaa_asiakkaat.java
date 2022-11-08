@@ -46,7 +46,7 @@ class JUnit_testaa_asiakkaat {
 		asiakkaat.get(0).setEtunimi("Pera");		
 		dao.changeItem(asiakkaat.get(0));
 		asiakkaat = dao.getAllItems("Pera");
-		assertEquals("A-1", asiakkaat.get(0).getEtunimi());
+		assertEquals("Pera", asiakkaat.get(0).getEtunimi());
 		assertEquals("Perä", asiakkaat.get(0).getSukunimi());
 		assertEquals("0400123123", asiakkaat.get(0).getPuhelin());
 		assertEquals("pertti.perä@sähköposti.com", asiakkaat.get(0).getSposti());		

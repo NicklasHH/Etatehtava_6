@@ -1,5 +1,6 @@
 package model.dao;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,7 +20,8 @@ public class Dao {
 	private Connection yhdista() {
 		Connection con = null;
 		String path = System.getProperty("catalina.base");
-		path = path.substring(0, path.indexOf(".metadata")).replace("\\", "/"); // Eclipsessa
+		//path = path.substring(0, path.indexOf(".metadata")).replace("\\", "/"); // Eclipsessa
+		path =  new File(System.getProperty("user.dir")).getParentFile().toString() +"\\"; //Testauksessa	
 		// System.out.println(path); //Tästä näet mihin kansioon laitat
 		// tietokanta-tiedostosi
 		// path += "/webapps/"; //Tuotannossa. Laita tietokanta webapps-kansioon
