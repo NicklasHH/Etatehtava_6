@@ -20,7 +20,8 @@ public class Dao {
 		Connection con = null;
 		String path = System.getProperty("catalina.base");
 		path = path.substring(0, path.indexOf(".metadata")).replace("\\", "/"); // Eclipsessa
-		//System.out.println(path); //Tästä näet mihin kansioon laitat tietokanta-tiedostosi
+		// System.out.println(path); //Tästä näet mihin kansioon laitat
+		// tietokanta-tiedostosi
 		// path += "/webapps/"; //Tuotannossa. Laita tietokanta webapps-kansioon
 		String url = "jdbc:sqlite:" + path + db;
 		try {
@@ -34,7 +35,7 @@ public class Dao {
 		return con;
 	}
 
-	private void sulje() {		
+	private void sulje() {
 		if (stmtPrep != null) {
 			try {
 				stmtPrep.close();
@@ -58,6 +59,7 @@ public class Dao {
 			}
 		}
 	}
+
 	public ArrayList<Asiakas> listaa() {
 		ArrayList<Asiakas> asiakkaat = new ArrayList<Asiakas>();
 		// asiakas_id, etunimi, sukunimi, puhelin, sposti
@@ -86,6 +88,7 @@ public class Dao {
 		}
 		return asiakkaat;
 	}
+
 	public ArrayList<Asiakas> listaa(String searchStr) {// metodeja voi kuormittaa, kunhan parametreissä eroja
 		ArrayList<Asiakas> asiakkaat = new ArrayList<Asiakas>();
 		// asiakas_id, etunimi, sukunimi, puhelin, sposti
@@ -118,6 +121,7 @@ public class Dao {
 		}
 		return asiakkaat;
 	}
+
 	public boolean addItem(Asiakas asiakas) {
 		boolean paluuArvo = true;
 		// asiakas_id, etunimi, sukunimi, puhelin, sposti
@@ -129,15 +133,16 @@ public class Dao {
 			stmtPrep.setString(2, asiakas.getSukunimi());
 			stmtPrep.setString(3, asiakas.getPuhelin());
 			stmtPrep.setString(4, asiakas.getSposti());
-			stmtPrep.executeUpdate();		
+			stmtPrep.executeUpdate();
 		} catch (Exception e) {
-			paluuArvo=false;
+			paluuArvo = false;
 			e.printStackTrace();
 		} finally {
 			sulje();
 		}
 		return paluuArvo;
 	}
+
 	public boolean removeItem(int asiakas_id) { // Oikeassa elämässä tiedot ensisijaisesti merkitään poistetuksi.
 		boolean paluuArvo = true;
 		sql = "DELETE FROM asiakkaat WHERE asiakas_id=?";
@@ -145,6 +150,54 @@ public class Dao {
 			con = yhdista();
 			stmtPrep = con.prepareStatement(sql);
 			stmtPrep.setInt(1, asiakas_id);
+			stmtPrep.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			paluuArvo = false;
+		} finally {
+			sulje();
+		}
+		return paluuArvo;
+	}
+
+	public Asiakas getItem(int asiakas_id) {
+		Asiakas asiakas = null;
+		sql = "SELECT * FROM asiakkaat WHERE asiakas_id=?";
+		try {
+			con = yhdista();
+			if (con != null) {
+				stmtPrep = con.prepareStatement(sql);
+				stmtPrep.setInt(1, asiakas_id);
+				rs = stmtPrep.executeQuery();
+				if (rs.isBeforeFirst()) { // jos kysely tuotti dataa, eli id on käytössä
+					rs.next();
+					asiakas = new Asiakas();
+					asiakas.setAsiakas_id(rs.getInt(1));
+					asiakas.setEtunimi(rs.getString(2));
+					asiakas.setSukunimi(rs.getString(3));
+					asiakas.setPuhelin(rs.getString(4));
+					asiakas.setSposti(rs.getString(5));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sulje();
+		}
+		return asiakas;
+	}
+
+	public boolean changeItem(Asiakas asiakas) {
+		boolean paluuArvo = true;
+		sql = "UPDATE asiakkaat SET etunimi=?, sukunimi=?, puhelin=?, sposti=? WHERE asiakas_id=?";
+		try {
+			con = yhdista();
+			stmtPrep = con.prepareStatement(sql);
+			stmtPrep.setString(1, asiakas.getEtunimi());
+			stmtPrep.setString(2, asiakas.getSukunimi());
+			stmtPrep.setString(3, asiakas.getPuhelin());
+			stmtPrep.setString(4, asiakas.getSposti());
+			stmtPrep.setInt(5, asiakas.getAsiakas_id());
 			stmtPrep.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

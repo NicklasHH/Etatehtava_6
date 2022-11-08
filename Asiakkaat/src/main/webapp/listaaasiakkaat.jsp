@@ -6,13 +6,15 @@
 <meta charset="ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <script src="scripts/main.js"></script>
-<title>Asiakkaat</title>
+<script src="scripts/io.js"></script>
+<title>Asiakkaiden listaus</title>
 </head>
-<body>
+<body onload="asetaFocus('hakusana')" onkeydown="tutkiKey(event, 'listaa')">
 	<table id="listaus">
 		<thead>
 			<tr>
-				<th colspan="5" class="oikealle"><a id="linkki" href="lisaaasiakas.jsp">Lisää uusi asiakas</a></th>
+				<th colspan="5" class="oikealle"><a id="linkki"
+					href="lisaaasiakas.jsp">Lisää uusi asiakas</a></th>
 			</tr>
 			<tr>
 				<th>Hakusana:</th>
