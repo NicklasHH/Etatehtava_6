@@ -1,0 +1,68 @@
+//funktio tietojen hakemista varten. Kutsutaan backin GET metodia
+function haeAsiakkaat() {
+	let url = "asiakkaat?hakusana=" + document.getElementById("hakusana").value;
+	let requestOptions = {
+        method: "GET",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    };
+    fetch(url, requestOptions)
+    .then(response => response.json())//Muutetaan vastausteksti JSON-objektiksi
+   	.then(response => printItems(response))
+   	.catch(errorText => console.error("Fetch failed: " + errorText));
+}
+
+//Kirjoitetaan tiedot taulukkoon JSON-objektilistasta
+function printItems(respObjList){
+	//console.log(respObjList);
+	let htmlStr="";
+	for(let item of respObjList){//yksi kokoelmalooppeista		
+    	htmlStr+="<tr id='rivi_"+item.asiakas_id+"'>";
+    	htmlStr+="<td>"+item.etunimi+"</td>";
+    	htmlStr+="<td>"+item.sukunimi+"</td>";
+    	htmlStr+="<td>"+item.puhelin+"</td>";
+    	htmlStr+="<td>"+item.sposti+"</td>";
+    	htmlStr+="<td>&nbsp;</td>";
+    	htmlStr+="</tr>";
+	}	
+	document.getElementById("tbody").innerHTML = htmlStr;
+}
+
+// Tutkitaan lisättävät tiedot ennen niiden lähettämistä backendiin
+function tutkiJaLisaa(){
+	if(tutkiTiedot()){
+		lisaaTiedot();
+	}
+}
+
+//funktio syöttötietojen tarkistamista varten (yksinkertainen)
+function tutkiTiedot(){
+	let ilmo="";	
+	let d = new Date();
+	if(document.getElementById("rekno").value.length<3){
+		ilmo="Rekisterinumero ei kelpaa!";	
+		document.getElementById("rekno").focus();	
+	}else if(document.getElementById("merkki").value.length<2){
+		ilmo="Merkki ei kelpaa!";
+		document.getElementById("merkki").focus();			
+	}else if(document.getElementById("malli").value.length<1){
+		ilmo="Malli ei kelpaa!";	
+		document.getElementById("malli").focus();	
+	}else if(document.getElementById("vuosi").value*1!=document.getElementById("vuosi").value){
+		ilmo="Vuosi ei ole luku!";	
+		document.getElementById("vuosi").focus();	
+	}else if(document.getElementById("vuosi").value<1900 || document.getElementById("vuosi").value>d.getFullYear()+1){
+		ilmo="Vuosi ei kelpaa!";	
+		document.getElementById("vuosi").focus();	
+	}
+	if(ilmo!=""){
+		document.getElementById("ilmo").innerHTML=ilmo;
+		setTimeout(function(){ document.getElementById("ilmo").innerHTML=""; }, 3000);
+		return false;
+	}else{
+		document.getElementById("rekno").value=siivoa(document.getElementById("rekno").value);
+		document.getElementById("merkki").value=siivoa(document.getElementById("merkki").value);
+		document.getElementById("malli").value=siivoa(document.getElementById("malli").value);
+		document.getElementById("vuosi").value=siivoa(document.getElementById("vuosi").value);	
+		return true;
+	}
+}

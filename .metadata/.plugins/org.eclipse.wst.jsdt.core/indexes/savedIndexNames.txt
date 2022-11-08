@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+C:\Users\nickl\Desktop\Ohjelmointi_palautettavat\Viikko5\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1325012103.index
+3795328433.index
+2479550151.index
+1731428190.index
+374088388.index
+2211342628.index
